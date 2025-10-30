@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EcoRutas ♻️ | Plataforma de Reciclaje y Gestión de Residuos</title>
+
+    <!-- META TAGS MEJORADOS -->
+    <meta name="description" content="EcoRutas: Conectamos comunidades con servicios de recolección y reciclaje. Calendarios inteligentes, comunidad ecológica y gestión sostenible de residuos.">
+    <meta name="keywords" content="reciclaje, gestión de residuos, medio ambiente, sostenibilidad, recolección, comunidad ecológica">
+    <meta name="author" content="EcoRutas">
+    <meta name="theme-color" content="#16a34a">
+    
+    <!-- OPEN GRAPH -->
+    <meta property="og:title" content="EcoRutas ♻️ | Plataforma de Reciclaje Inteligente">
+    <meta property="og:description" content="Conecta con servicios de recolección, únete a la comunidad ecológica y haz del reciclaje una experiencia simple.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/og-image.jpg">
+    
+    <!-- TWITTER CARD -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="EcoRutas ♻️">
+    <meta name="twitter:description" content="Plataforma de Reciclaje y Gestión de Residuos">
+
+    <!-- FUENTES -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+
+  <body class="bg-gray-50 text-gray-800 transition-colors duration-300">
+    <!-- Loader profesional -->
+    <div id="loading-screen" class="fixed inset-0 flex items-center justify-center bg-white dark:bg-gray-900 z-50 transition-colors duration-300">
+      <div class="flex flex-col items-center space-y-4">
+        <div class="relative">
+          <div class="w-16 h-16 border-4 border-green-100 rounded-full"></div>
+          <div class="w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full animate-spin absolute top-0 left-0"></div>
+        </div>
+        <div class="text-center">
+          <h2 class="text-xl font-semibold text-green-700 dark:text-green-400 mb-2">Cargando EcoRutas...</h2>
+          <p class="text-sm text-gray-600 dark:text-gray-400">Preparando tu experiencia ecológica</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- React root -->
+    <div id="root"></div>
+
+    <script type="module" src="/src/main.tsx"></script>
+
+    <script>
+      window.addEventListener("load", () => {
+        setTimeout(() => {
+          const loader = document.getElementById("loading-screen");
+          if (loader) {
+            loader.style.opacity = '0';
+            loader.style.transition = 'opacity 0.5s ease';
+            setTimeout(() => {
+              loader.style.display = 'none';
+            }, 500);
+          }
+        }, 1000);
+      });
+    </script>
+  </body>
+</html>

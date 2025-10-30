@@ -1,0 +1,225 @@
+/* ==========================================================
+   EcoRutas - Estilos base globales
+   ========================================================== */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------
+   Fuentes y estilo general
+--------------------------------*/
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+:root {
+  --primary-green: #16a34a;
+  --primary-green-dark: #15803d;
+  --accent-green: #22c55e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: 'Poppins', sans-serif;
+  scroll-behavior: smooth;
+  background-color: #f9fafb;
+  color: #1f2937;
+  line-height: 1.6;
+}
+
+/* ------------------------------
+   Temas claros / oscuros
+--------------------------------*/
+body.dark {
+  background-color: #0d1117;
+  color: #e5e7eb;
+}
+
+body.dark #root {
+  background-color: #0d1117;
+}
+
+/* ------------------------------
+   Scrollbar personalizado
+--------------------------------*/
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+body.dark ::-webkit-scrollbar-track {
+  background: #374151;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--primary-green), var(--accent-green));
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, var(--primary-green-dark), var(--primary-green));
+}
+
+/* ------------------------------
+   Animaciones globales
+--------------------------------*/
+.fade-in {
+  animation: fadeIn 0.6s ease-in-out forwards;
+}
+
+.slide-in {
+  animation: slideIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(15px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ------------------------------
+   Utilidades de transición para Framer Motion
+--------------------------------*/
+.page-transition {
+  transition: all 0.4s ease-in-out;
+}
+
+/* ------------------------------
+   Botones y enlaces personalizados
+--------------------------------*/
+.btn-primary {
+  @apply bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-xl shadow-md transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50;
+}
+
+.btn-secondary {
+  @apply bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-xl shadow-md transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50;
+}
+
+.btn-outline {
+  @apply border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white font-semibold py-2 px-4 rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50;
+}
+
+body.dark .btn-outline {
+  @apply border-green-400 text-green-400 hover:bg-green-400 hover:text-gray-900;
+}
+
+/* ------------------------------
+   Enlaces
+--------------------------------*/
+a {
+  @apply transition-colors duration-200 text-green-600 hover:text-green-700;
+}
+
+body.dark a {
+  @apply text-green-400 hover:text-green-300;
+}
+
+/* ------------------------------
+   Cards globales
+--------------------------------*/
+.card {
+  @apply bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700;
+}
+
+.card-hover {
+  @apply transform hover:-translate-y-1;
+}
+
+/* ------------------------------
+   Formularios
+--------------------------------*/
+.form-input {
+  @apply w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200;
+}
+
+.form-label {
+  @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2;
+}
+
+/* ------------------------------
+   Loader personalizado
+--------------------------------*/
+.loader-spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid var(--primary-green);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ------------------------------
+   Utilidades de diseño
+--------------------------------*/
+.min-h-screen-safe {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* ------------------------------
+   Responsive improvements
+--------------------------------*/
+@media (max-width: 768px) {
+  .card {
+    @apply p-4 rounded-xl;
+  }
+  
+  .btn-primary, .btn-secondary, .btn-outline {
+    @apply py-3 px-4 text-sm;
+  }
+}
+
+/* ------------------------------
+   Focus accessibility
+--------------------------------*/
+*:focus-visible {
+  outline: 2px solid var(--primary-green);
+  outline-offset: 2px;
+}
+
+/* ------------------------------
+   Selection color
+--------------------------------*/
+::selection {
+  background-color: var(--primary-green);
+  color: white;
+}
+
+::-moz-selection {
+  background-color: var(--primary-green);
+  color: white;
+}
