@@ -13,25 +13,30 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Find and list project structure
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
         run: |
-          echo "=== Estructura del proyecto ==="
-          find . -name "package.json" -type f
-          echo "=== Contenido de frontend/ ==="
-          ls -la frontend/ || echo "No existe frontend/"
-          echo "=== Buscando frontend-ts ==="
-          find . -name "frontend-ts" -type d
+          cd frontend/frontend-ts
+          npm install
+
+      - name: Build project
+        run: |
+          cd frontend/frontend-ts
+          npm run build
 
       - name: Deploy to Azure Static Web Apps
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}  # ✅
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           app_location: "frontend/frontend-ts"
           output_location: "dist"
-          app_build_command: "npm run build"
-
-
+          skip_app_build: true  # Porque ya hiciste build manualmente
+          
 
 
