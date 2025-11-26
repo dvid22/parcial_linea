@@ -4,7 +4,6 @@ import {
   FaThumbsUp, 
   FaThumbsDown, 
   FaPhoneAlt, 
-  FaSignOutAlt, 
   FaCalendarAlt,
   FaComment,
   FaHome,
@@ -37,7 +36,6 @@ interface Comment {
     nombre: string;
     email: string;
   };
-  // Para likes/dislikes - necesitaremos calcularlos
   Likes?: any[];
 }
 
@@ -63,7 +61,6 @@ const CalendarPage: React.FC = () => {
       const response = await getSchedules();
       console.log("📥 Horarios recibidos:", response);
       
-      // Ajustar según la estructura de respuesta
       if (response.success && response.data) {
         setSchedules(response.data);
       } else if (Array.isArray(response)) {
@@ -84,7 +81,6 @@ const CalendarPage: React.FC = () => {
       const response = await getComments();
       console.log("📥 Comentarios recibidos:", response);
       
-      // Ajustar según la estructura de respuesta
       if (response.success && response.data) {
         setComments(response.data);
       } else if (Array.isArray(response)) {
@@ -137,7 +133,6 @@ const CalendarPage: React.FC = () => {
         await dislikeComment(id);
       }
       
-      // Recargar comentarios para ver los likes actualizados
       await fetchComments();
     } catch (error: any) {
       console.error("❌ Error al actualizar reacción:", error);
@@ -145,21 +140,12 @@ const CalendarPage: React.FC = () => {
     }
   };
 
-  // Calcular likes y dislikes para cada comentario
   const getLikesCount = (comment: Comment) => {
-    // Si el backend no proporciona counts, mostrar 0 temporalmente
     return 0;
   };
 
   const getDislikesCount = (comment: Comment) => {
-    // Si el backend no proporciona counts, mostrar 0 temporalmente
     return 0;
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    navigate("/");
   };
 
   // Navegación entre páginas
@@ -208,8 +194,8 @@ const CalendarPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
-      {/* NAVEGACIÓN SUPERIOR */}
-      <nav className="bg-white shadow-lg">
+      {/* SOLO TÍTULO SIN NAVEGACIÓN DUPLICADA */}
+      <div className="bg-white shadow-lg">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center gap-3">
@@ -218,40 +204,9 @@ const CalendarPage: React.FC = () => {
               </div>
               <span className="text-xl font-bold text-gray-800">Calendario EcoRutas</span>
             </div>
-            
-            <div className="flex items-center gap-3">
-              {/* BOTONES DE NAVEGACIÓN */}
-              <button
-                onClick={() => navigateTo("/admin")}
-                className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition text-sm"
-              >
-                <FaHome /> Admin
-              </button>
-              
-              <button
-                onClick={() => navigateTo("/comments")}
-                className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition text-sm"
-              >
-                <FaUsers /> Comunidad
-              </button>
-              
-              <button
-                onClick={() => navigateTo("/messages")}
-                className="flex items-center gap-2 bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition text-sm"
-              >
-                <FaEnvelope /> Mensajes
-              </button>
-
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition text-sm"
-              >
-                <FaSignOutAlt /> Salir
-              </button>
-            </div>
           </div>
         </div>
-      </nav>
+      </div>
 
       {/* PESTAÑAS PRINCIPALES */}
       <div className="max-w-7xl mx-auto mt-6 px-4">
@@ -346,7 +301,7 @@ const CalendarPage: React.FC = () => {
                 ))}
               </div>
 
-              {/* TABLA DETALLADA (como respaldo) */}
+              {/* TABLA DETALLADA */}
               <div className="mt-8">
                 <h3 className="text-lg font-semibold text-gray-800 mb-4">Vista detallada</h3>
                 <div className="overflow-x-auto">

@@ -14,6 +14,12 @@ const LandingPage = () => {
     navigate("/admin");
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    window.location.reload();
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 dark:from-gray-900 dark:to-emerald-900">
       {/* Header */}
@@ -38,7 +44,7 @@ const LandingPage = () => {
             className="flex space-x-4"
           >
             {isAuthenticated ? (
-              // Botones para usuario AUTENTICADO
+              // Botones para usuario AUTENTICADO - SOLO UN BOTÓN DE CERRAR SESIÓN
               <>
                 <button
                   onClick={handleAdmin}
@@ -47,11 +53,7 @@ const LandingPage = () => {
                   Ir al Admin
                 </button>
                 <button
-                  onClick={() => {
-                    localStorage.removeItem("token");
-                    localStorage.removeItem("user");
-                    window.location.reload();
-                  }}
+                  onClick={handleLogout}
                   className="px-6 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-all duration-300 font-medium shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
                   Cerrar Sesión
@@ -117,7 +119,7 @@ const LandingPage = () => {
             
             <div className="flex flex-col sm:flex-row gap-4 pt-6">
               {isAuthenticated ? (
-                // Botones para usuario AUTENTICADO
+                // Botones para usuario AUTENTICADO - SIN BOTÓN DUPLICADO DE CERRAR SESIÓN
                 <>
                   <button
                     onClick={handleAdmin}

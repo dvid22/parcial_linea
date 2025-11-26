@@ -1,11 +1,12 @@
+
 // Importar directamente
 import Barrio from "../models/Barrio.js";
 import Sector from "../models/Sector.js";
 
 export const crearBarrio = async (req, res) => {
   try {
-    const { nombre } = req.body;
-    const barrio = await Barrio.create({ nombre });
+    const { nombre, direccion, descripcion } = req.body;
+    const barrio = await Barrio.create({ nombre, direccion, descripcion });
     res.status(201).json(barrio);
   } catch (error) {
     res.status(500).json({ msg: "Error crear barrio", error: error.message });

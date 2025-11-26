@@ -41,6 +41,13 @@ interface User {
   rol: string;
 }
 
+interface BasicUser {
+  id: number;
+  nombre: string;
+  email: string;
+  rol?: string;
+}
+
 const MessagesPage: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [users, setUsers] = useState<User[]>([]);
@@ -57,8 +64,14 @@ const MessagesPage: React.FC = () => {
   // Obtener mensajes y usuarios al cargar
   useEffect(() => {
     fetchMessages();
-    fetchAllUsers();
   }, []);
+
+  // Cargar usuarios cuando los mensajes cambien
+  useEffect(() => {
+    if (messages.length > 0) {
+      fetchAllUsers();
+    }
+  }, [messages]);
 
   // Cargar conversación cuando se selecciona un usuario
   useEffect(() => {
@@ -91,20 +104,24 @@ const MessagesPage: React.FC = () => {
     }
   };
 
-  const fetchAllUsers = async () => {
+  const fetchAllUsers = () => {
     try {
-      console.log("🔄 Cargando usuarios...");
-      // En una implementación real, usarías getUsers() si existe
-      // Por ahora, simulamos que obtenemos usuarios de los mensajes
+      console.log("🔄 Cargando usuarios desde mensajes...");
       const uniqueUsers = new Map<number, User>();
       
       // Extraer usuarios únicos de los mensajes
       messages.forEach(message => {
         if (message.sender && message.sender.id !== currentUser.id) {
-          uniqueUsers.set(message.sender.id, message.sender);
+          uniqueUsers.set(message.sender.id, { 
+            ...message.sender, 
+            rol: (message.sender as any).rol || 'user' 
+          } as User);
         }
         if (message.receiver && message.receiver.id !== currentUser.id) {
-          uniqueUsers.set(message.receiver.id, message.receiver);
+          uniqueUsers.set(message.receiver.id, { 
+            ...message.receiver, 
+            rol: (message.receiver as any).rol || 'user' 
+          } as User);
         }
       });
       

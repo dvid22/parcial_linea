@@ -231,7 +231,6 @@ export const deleteSchedule = async (id: number) => {
   return response.data;
 };
 
-// =============================
 // 🏘️ SERVICIOS DE BARRIOS Y SECTORES
 // =============================
 
@@ -240,7 +239,11 @@ export const getBarrios = async () => {
   return response.data;
 };
 
-export const createBarrio = async (data: { nombre: string }) => {
+export const createBarrio = async (data: { 
+  nombre: string;
+  direccion?: string;
+  descripcion?: string;
+}) => {
   const response = await api.post('/barrios', data);
   return response.data;
 };

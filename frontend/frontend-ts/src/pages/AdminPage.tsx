@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaTrash, FaCalendarAlt, FaSignOutAlt, FaPlus, FaHome, FaMapMarkerAlt } from "react-icons/fa";
@@ -20,6 +21,8 @@ interface Schedule {
 interface Barrio {
   id: number;
   nombre: string;
+  direccion?: string;
+  descripcion?: string;
   sectores?: Sector[];
 }
 
@@ -38,6 +41,8 @@ const AdminPage: React.FC = () => {
   const [hora, setHora] = useState("");
   const [tipo, setTipo] = useState("orgánico");
   const [nuevoBarrio, setNuevoBarrio] = useState("");
+  const [direccionBarrio, setDireccionBarrio] = useState("");
+  const [descripcionBarrio, setDescripcionBarrio] = useState("");
   const [nuevoSector, setNuevoSector] = useState("");
   const [barrioParaSector, setBarrioParaSector] = useState<number>(0);
   const [loading, setLoading] = useState(false);
@@ -57,7 +62,6 @@ const AdminPage: React.FC = () => {
       const response = await getSchedules();
       console.log("📥 Horarios recibidos:", response);
       
-      // Ajustar según la estructura de respuesta
       if (response.success && response.data) {
         setSchedules(response.data);
       } else if (Array.isArray(response)) {
@@ -77,14 +81,25 @@ const AdminPage: React.FC = () => {
       console.log("🔄 Cargando barrios...");
       const response = await getBarrios();
       console.log("📥 Barrios recibidos:", response);
+      console.log("📋 Estructura completa:", JSON.stringify(response, null, 2));
+      
+      let barriosData: Barrio[] = [];
       
       if (Array.isArray(response)) {
-        setBarrios(response);
+        barriosData = response;
       } else if (response && response.data) {
-        setBarrios(response.data);
+        barriosData = response.data;
       } else {
         console.warn("⚠️ Formato de barrios inesperado:", response);
-        setBarrios([]);
+        barriosData = [];
+      }
+      
+      setBarrios(barriosData);
+      
+      // Debug: verificar campos de los barrios
+      if (barriosData.length > 0) {
+        console.log("📝 Campos del primer barrio:", Object.keys(barriosData[0]));
+        console.log("📍 Datos del primer barrio:", barriosData[0]);
       }
     } catch (error) {
       console.error("❌ Error al obtener barrios:", error);
@@ -145,12 +160,22 @@ const AdminPage: React.FC = () => {
 
     setLoading(true);
     try {
-      console.log("📤 Creando nuevo barrio:", nuevoBarrio);
+      console.log("📤 Creando nuevo barrio:", { 
+        nombre: nuevoBarrio,
+        direccion: direccionBarrio,
+        descripcion: descripcionBarrio
+      });
       
-      await createBarrio({ nombre: nuevoBarrio });
+      await createBarrio({ 
+        nombre: nuevoBarrio,
+        direccion: direccionBarrio,
+        descripcion: descripcionBarrio
+      });
       
       // Limpiar formulario
       setNuevoBarrio("");
+      setDireccionBarrio("");
+      setDescripcionBarrio("");
       
       // Recargar barrios
       await fetchBarrios();
@@ -234,7 +259,6 @@ const AdminPage: React.FC = () => {
             </div>
             
             <div className="flex items-center gap-4">
-              {/* BOTONES DE NAVEGACIÓN */}
               <button
                 onClick={() => navigateTo("/calendar")}
                 className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition"
@@ -506,10 +530,10 @@ const AdminPage: React.FC = () => {
 
               {/* FORMULARIO DE BARRIOS */}
               <form onSubmit={handleAddBarrio} className="mb-8 p-4 bg-green-50 rounded-lg">
-                <div className="flex gap-4 items-end">
-                  <div className="flex-1">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Nombre del Barrio
+                      Nombre del Barrio *
                     </label>
                     <input
                       type="text"
@@ -517,16 +541,41 @@ const AdminPage: React.FC = () => {
                       value={nuevoBarrio}
                       onChange={(e) => setNuevoBarrio(e.target.value)}
                       placeholder="Ej: Centro, Norte, Sur..."
+                      required
                     />
                   </div>
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition disabled:opacity-50 flex items-center gap-2 font-medium"
-                  >
-                    <FaPlus /> {loading ? "Creando..." : "Crear Barrio"}
-                  </button>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Dirección/Ubicación
+                    </label>
+                    <input
+                      type="text"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                      value={direccionBarrio}
+                      onChange={(e) => setDireccionBarrio(e.target.value)}
+                      placeholder="Ej: Zona centro, entre calles A y B..."
+                    />
+                  </div>
                 </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Descripción/Ruta
+                  </label>
+                  <textarea
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    value={descripcionBarrio}
+                    onChange={(e) => setDescripcionBarrio(e.target.value)}
+                    placeholder="Ej: Ruta de recolección: Inicia en calle principal, recorre sector norte..."
+                    rows={3}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition disabled:opacity-50 flex items-center gap-2 font-medium"
+                >
+                  <FaPlus /> {loading ? "Creando..." : "Crear Barrio"}
+                </button>
               </form>
 
               {/* LISTADO DE BARRIOS */}
@@ -534,7 +583,29 @@ const AdminPage: React.FC = () => {
                 {barrios.map((barrio) => (
                   <div key={barrio.id} className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition">
                     <h3 className="font-semibold text-lg text-gray-800 mb-2">{barrio.nombre}</h3>
-                    <div className="text-sm text-gray-600">
+                    
+                    {/* Dirección */}
+                    {barrio.direccion && (
+                      <div className="mb-2">
+                        <p className="text-xs text-gray-500 font-medium">📍 Dirección:</p>
+                        <p className="text-sm text-gray-700">{barrio.direccion}</p>
+                      </div>
+                    )}
+                    
+                    {/* Descripción */}
+                    {barrio.descripcion && (
+                      <div className="mb-2">
+                        <p className="text-xs text-gray-500 font-medium">🗺️ Ruta/Descripción:</p>
+                        <p className="text-sm text-gray-700" style={{ 
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical',
+                          overflow: 'hidden'
+                        }}>{barrio.descripcion}</p>
+                      </div>
+                    )}
+                    
+                    <div className="text-sm text-gray-600 border-t pt-2">
                       <p className="flex items-center gap-1">
                         <FaMapMarkerAlt className="text-green-500" />
                         Sectores: {barrio.sectores?.length || 0}
