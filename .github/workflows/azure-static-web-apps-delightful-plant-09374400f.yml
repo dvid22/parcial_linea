@@ -24,12 +24,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd frontend/frontend-ts
+          cd frontend
           npm install
 
       - name: Build project
         run: |
-          cd frontend/frontend-ts
+          cd frontend
           npm run build
 
       - name: Deploy to Azure Static Web Apps
@@ -38,13 +38,9 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: "frontend/frontend-ts"
-          output_location: "dist"   # relativo a app_location
-          api_location: ""          # si no hay API
-
-
-
-
+          app_location: "frontend"
+          output_location: "dist"
+          skip_app_build: true
 
 
 
