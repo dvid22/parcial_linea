@@ -17,7 +17,6 @@ jobs:
     permissions:
        id-token: write
        contents: read
-
     steps:
       - uses: actions/checkout@v3
         with:
@@ -31,10 +30,10 @@ jobs:
         uses: actions/github-script@v6
         id: idtoken
         with:
-           script: |
-               const coredemo = require('@actions/core')
-               return await coredemo.getIDToken()
-           result-encoding: string
+          script: |
+              const coredemo = require('@actions/core')
+              return await coredemo.getIDToken()
+          result-encoding: string
 
       - name: Build And Deploy
         id: builddeploy
@@ -43,19 +42,17 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_DELIGHTFUL_PLANT_09374400F }}
           action: "upload"
 
-          ###### CONFIGURACIÓN DEL PROYECTO ######
+          ###### CONFIGURACIÓN CORRECTA ######
           app_location: "./frontend"
           api_location: ""
-          output_location: "dist"              # <-- Vite usa "dist" NO "build"
-          app_build_command: "npm install && npm run build"
+          output_location: "dist"   # ← IMPORTANTE: Vite usa dist
           github_id_token: ${{ steps.idtoken.outputs.result }}
-          ###### FIN CONFIGURACIÓN ######
+          ####################################
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
     name: Close Pull Request Job
-
     steps:
       - name: Close Pull Request
         id: closepullrequest
