@@ -1,25 +1,20 @@
-name: Azure Static Web Apps CI/CD
-
-on:
-  push:
-    branches:
-      - main
+name: Debug Azure Deployment
+on: [push]
 
 jobs:
-  build_and_deploy:
+  debug:
     runs-on: ubuntu-latest
-    name: Build and Deploy Job
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Deploy to Azure Static Web Apps
-        uses: Azure/static-web-apps-deploy@v1
-        with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          action: "upload"
-          app_location: "frontend/frontend-ts"
-          output_location: "dist"
-          app_build_command: "npm run build"
-
+      
+      - name: Debug Info
+        run: |
+          echo "=== Token Info ==="
+          echo "Token exists: $([ -n "${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}" ] && echo 'YES' || echo 'NO')"
+          echo "Token length: ${#TOKEN} characters"
+          echo "=== Repository Info ==="
+          echo "Repo: $GITHUB_REPOSITORY"
+          echo "Branch: $GITHUB_REF_NAME"
+        env:
+          TOKEN: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
